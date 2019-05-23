@@ -1,0 +1,2 @@
+Procesadores=p1,p2
+Tareas=5,4,6,3,2

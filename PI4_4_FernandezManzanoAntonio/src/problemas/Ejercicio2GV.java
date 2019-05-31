@@ -5,7 +5,7 @@ import us.lsi.graphs.SimpleEdge;
 public class Ejercicio2GV extends SimpleEdge<VerticeGV> {
 	
 	public static Ejercicio2GV of(VerticeGV v1, VerticeGV v2, Integer a) {
-		Double weight = v1.numeros.get(v1.index)%2==0&& a==1?-1.0:0;
+		Double weight = VerticeGV.numeros.get(v1.index)%2==0&& a==1?-1.0:0.;
 		return new Ejercicio2GV(v1, v2, weight, a);
 	}
 

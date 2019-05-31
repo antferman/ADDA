@@ -2,11 +2,7 @@ package problemas;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.*;
-
 import us.lsi.common.Lists2;
 import us.lsi.graphs.*;
 
@@ -47,7 +43,7 @@ public class VerticeGV extends ActionVirtualVertex<VerticeGV, Ejercicio2GV, Inte
 	
 	@Override
 	public boolean isValid() {
-		return index>=0 && index<numeros.size()-1;
+		return index>=0 && index<=numeros.size();
 	}
 
 	@Override

@@ -2,68 +2,135 @@ package problemas;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
+import java.util.stream.*;
 
-import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.VirtualVertex;
+import us.lsi.common.Lists2;
+import us.lsi.graphs.*;
 
+
+
+
+public class VerticeGV extends ActionVirtualVertex<VerticeGV, Ejercicio2GV, Integer> {
+
+	public static VerticeGV of() {
+		return new VerticeGV(0, 0, 0, new ArrayList<>());
+	}
 	
-public class VerticeGV implements VirtualVertex<VerticeGV, SimpleEdge<VerticeGV>>{
-	private Integer posActual;
-	private Integer[] a = {1,3,1,1,2,5,8,10,6,11,2};
-	private List<Integer> numeros = Arrays.asList(a);
-	private static final int n = 24;
-	private Integer countPares;
-	private List<Integer> solucion;
-	private Integer suma;
-	public static VerticeGV create(Integer... d) {
-		return new VerticeGV(d);
+	public static VerticeGV of(Integer index, Integer suma, Integer countPares,List<Integer> sol) {
+		return new VerticeGV(index, suma, countPares, sol);
 	}
 
-	public static VerticeGV create(Integer[][] datos, int x0, int y0) {
-		return new VerticeGV(datos, x0, y0);
-	}
-
-	private VerticeGV(Integer[][] datos, int x0, int y0) {
+	private static final Integer[] num = {1,3,1,1,2,5,8,10,6,11};
+	public static List<Integer> numeros = Arrays.asList(num);
+	public static final Integer n=24;
+	public List<Integer> solucion;
+	public Integer countPares;
+	public Integer index;
+	public Integer suma;
+	
+	public VerticeGV(Integer index, Integer suma, Integer countPares, List<Integer> sol) {
 		super();
+		this.index = index;
+		this.suma= suma;
+		this.countPares=countPares;
+		this.solucion=sol;
 	}
+
+	public List<Integer> getSolucion(){
+		List<Integer> s = new ArrayList<>(solucion);
+		return s;
+	}
+
 	
+	@Override
 	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return suma<=24;
+		return index>=0 && index<numeros.size()-1;
 	}
 
 	@Override
-	public Set<VerticeGV> getNeighborListOf() {
-		Set<VerticeGV> ls = new HashSet<>();
-		List<Integer> tmp = new ArrayList<>(solucion);
-		if (posActual<numeros.size()) {
-			if(numeros.get(posActual)+ suma <=24) {
-				VerticeGV e VerticeGV.create();
-				ls.add(e VerticeGV.create());
-				if (numeros.get(posActual)%2==0) {
-					countPares++;;
-				}
-				posActual++;
-				suma = numeros.get(posActual) + suma;
-			}else {
-				Integer rest = tmp.get(tmp.size()-1);
-				posActual--;
-				tmp.remove(rest);
-				VerticeGV e VerticeGV.create();
-				ls.add(e);
-				suma = suma-rest;
-			}
+	protected List<Integer> actions() {
+		List<Integer> ls = new ArrayList<>();
+		if (index<numeros.size()) {
+			ls.add(0);
+		
+		if (numeros.get(index) + suma <=n) {
+			ls.add(1);
+		}
 		}
 		return ls;
 	}
 
 	@Override
-	public Set<SimpleEdge<VerticeGV>> edgesOf() {
-		return getNeighborListOf().stream().map(vecino-> SimpleEdge.of(this, vecino)).collect(Collectors.toSet());
+	protected VerticeGV getThis() {
+		return this;
 	}
 
+	@Override
+	protected VerticeGV neighbor(Integer a) {
+		List<Integer> nSol = Lists2.newList(solucion);
+		Integer e = numeros.get(index);
+		Integer nPares = countPares;
+		Integer nSuma = suma;
+		if(a==1) {
+			nSol.add(e);
+			if (e%2==0) {
+				nPares++;
+			}
+			nSuma = nSuma + e;
+		}	
+		
+		return VerticeGV.of(index+1, nSuma, nPares, nSol);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((countPares == null) ? 0 : countPares.hashCode());
+		result = prime * result + ((index == null) ? 0 : index.hashCode());
+		result = prime * result + ((solucion == null) ? 0 : solucion.hashCode());
+		result = prime * result + ((suma == null) ? 0 : suma.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VerticeGV other = (VerticeGV) obj;
+		if (countPares == null) {
+			if (other.countPares != null)
+				return false;
+		} else if (!countPares.equals(other.countPares))
+			return false;
+		if (index == null) {
+			if (other.index != null)
+				return false;
+		} else if (!index.equals(other.index))
+			return false;
+		if (solucion == null) {
+			if (other.solucion != null)
+				return false;
+		} else if (!solucion.equals(other.solucion))
+			return false;
+		if (suma == null) {
+			if (other.suma != null)
+				return false;
+		} else if (!suma.equals(other.suma))
+			return false;
+		return true;
+	}
+
+	@Override
+	protected Ejercicio2GV getEdge(Integer a) {
+		return Ejercicio2GV.of(this, neighbor(a), a);
+	}
+	
 }

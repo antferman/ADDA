@@ -1,8 +1,15 @@
 package problemas;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
+import us.lsi.astar.AStarAlgorithm;
+import us.lsi.astar.AStarGraph;
+import us.lsi.astar.AStarSimpleVirtualGraph;
 import us.lsi.bt.AlgoritmoBT;
+import us.lsi.graphs.SimpleEdge;
 import us.lsi.pd.AlgoritmoPD;
 
 public class TestEj2 {
@@ -27,5 +34,27 @@ public class TestEj2 {
 		a.ejecuta();
 		String s = (a.getSolucion()==null) ? "No hay solución":a.getSolucion().toString();
 		System.out.println(s);
+	
+	
+	
+	
+
+			
+			VerticeGV e = VerticeGV.of();
+			
+			AStarGraph<VerticeGV,Ejercicio2GV>  graph = AStarSimpleVirtualGraph.of(r ->r.getEdgeWeight());
+			
+			Predicate<VerticeGV> goal = (VerticeGV v) -> v.index == v.numeros.size() 
+					&& v.suma == v.n;
+			
+			var alg1 = AStarAlgorithm.of(graph,e,goal,(v,c)->0.);
+
+
+			
+			List<Integer> s1 = alg1.getPathVertexList().get(alg1.getPathVertexList().size()-1).getSolucion();
+			
+			System.out.println("Solucion GV: "+s1);
+		
+
 	}
 }

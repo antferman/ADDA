@@ -51,13 +51,7 @@ public class Ejercicio2PDR implements ProblemaPDR<List<Integer>, Integer, Ejerci
 		return index==numeros.size();
 	}
 
-	@Override
-	public Sp<Integer> getSolucionParcialCasoBase() {
-		if (suma==n) {
-			return Sp.create(null, 0.);
-		}
-		return null;
-	}
+	
 
 	@Override
 	public Ejercicio2PDR getSubProblema(Integer a) {
@@ -158,6 +152,14 @@ public class Ejercicio2PDR implements ProblemaPDR<List<Integer>, Integer, Ejerci
 		} else if (!suma.equals(other.suma))
 			return false;
 		return true;
+	}
+
+
+	public Sp<Integer> getSolucionParcialCasoBase() {
+		if (suma==n) {
+			return Sp.create(null, 0.);
+		}
+		return null;
 	}
 	
 	
